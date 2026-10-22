@@ -1,0 +1,58 @@
+name: mindsync-domain-https
+services:
+  caddy:
+    image: ${MINDSYNC_CADDY_IMAGE:?Set the built Caddy image ID}
+    container_name: mindsync-domain-https
+    restart: unless-stopped
+    network_mode: host
+    user: "${MINDSYNC_RUN_UID:?Set the directory owner UID}:${MINDSYNC_RUN_GID:?Set the directory owner GID}"
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      dns:
+        condition: service_started
+    environment:
+      MINDSYNC_HTTPS_DOMAIN: ${MINDSYNC_HTTPS_DOMAIN:?Set the certificate domain}
+      MINDSYNC_HTTPS_IP: ${MINDSYNC_HTTPS_IP:?Set the private NAS IP}
+      MINDSYNC_HTTPS_PORT: ${MINDSYNC_HTTPS_PORT:-8443}
+      MINDSYNC_UPSTREAM: ${MINDSYNC_UPSTREAM:-127.0.0.1:8080}
+    env_file:
+      - ./alidns.env
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./data:/data
+      - ./config:/config
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,noexec,size=16m
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+  dns:
+    image: adguard/dnsproxy:v0.86.0@sha256:4d65bafbf246b206a1af35d4263a86c35451d957458c7836304199f1cd2c1535
+    container_name: mindsync-certificate-dns
+    restart: unless-stopped
+    network_mode: host
+    user: "${MINDSYNC_RUN_UID:?Set the directory owner UID}:${MINDSYNC_RUN_GID:?Set the directory owner GID}"
+    read_only: true
+    cap_drop: [ALL]
+    # The official executable carries this file capability.
+    cap_add: [NET_BIND_SERVICE]
+    security_opt:
+      - no-new-privileges:true
+    command:
+      - --listen=127.0.0.1
+      - --port=53535
+      - --upstream=https://1.1.1.1/dns-query
+      - --upstream=https://8.8.8.8/dns-query
+      - --upstream-mode=parallel
+      - --timeout=10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "2m"
+        max-file: "2"

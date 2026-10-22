@@ -1,0 +1,31 @@
+# Apply after the root compose.yaml; PostgreSQL remains a separate service.
+services:
+  mindsync:
+    # This deployment uses the prebuilt combined image, not the plain backend Dockerfile.
+    build: !reset null
+    environment:
+      MINDSYNC_PORT: "18080"
+      MINDSYNC_LISTEN_ADDRESS: "127.0.0.1"
+      MINDSYNC_TRUSTED_PROXIES: "127.0.0.1"
+      MINDSYNC_HTTPS_DOMAIN: ${MINDSYNC_HTTPS_DOMAIN:?Set the public HTTPS domain}
+      MINDSYNC_HTTPS_PORT: "8080"
+      XDG_DATA_HOME: /var/lib/mindsync-tls
+      XDG_CONFIG_HOME: /var/lib/mindsync-tls-config
+    env_file:
+      - ${MINDSYNC_DNS_ENV_FILE:?Set the absolute private DNS environment file path}
+    volumes:
+      - ${MINDSYNC_TLS_DATA_DIR:?Set the absolute certificate data directory}:/var/lib/mindsync-tls
+      - ${MINDSYNC_TLS_CONFIG_DIR:?Set the absolute certificate config directory}:/var/lib/mindsync-tls-config
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,noexec,size=16m
+    healthcheck:
+      test: ["CMD", "mindsync-healthcheck"]
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"

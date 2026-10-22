@@ -1,0 +1,27 @@
+{
+	auto_https disable_redirects
+	skip_install_trust
+	admin off
+	persist_config off
+	servers {
+		protocols h1 h2
+	}
+}
+
+https://{$MINDSYNC_HTTPS_DOMAIN}:{$MINDSYNC_HTTPS_PORT} {
+	bind {$MINDSYNC_HTTPS_IP}
+	tls {
+		issuer acme {
+			dir https://acme-v02.api.letsencrypt.org/directory
+			dns alidns {
+				access_key_id {env.ALIYUN_ACCESS_KEY_ID}
+				access_key_secret {env.ALIYUN_ACCESS_KEY_SECRET}
+			}
+			resolvers 127.0.0.1:53535
+			propagation_timeout 10m
+		}
+	}
+	reverse_proxy {$MINDSYNC_UPSTREAM} {
+		header_up X-Real-IP {remote_host}
+	}
+}

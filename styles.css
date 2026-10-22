@@ -1,0 +1,772 @@
+/* ==========================================================================
+   MindSync - Apple Cupertino Design System for Obsidian Plugin
+   Human Interface Guidelines (HIG) / macOS Sequoia & visionOS Clean Aesthetic
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Apple Design Tokens & Theme Variables
+   -------------------------------------------------------------------------- */
+:root {
+  /* Apple System Accent Colors */
+  --ms-apple-blue: #0071e3;
+  --ms-apple-blue-hover: #0077ed;
+  --ms-apple-blue-soft: rgba(0, 113, 227, 0.09);
+  --ms-apple-blue-border: rgba(0, 113, 227, 0.22);
+  
+  --ms-apple-green: #34c759;
+  --ms-apple-green-hover: #30b852;
+  --ms-apple-green-soft: rgba(52, 199, 89, 0.11);
+  --ms-apple-green-border: rgba(52, 199, 89, 0.24);
+  
+  --ms-apple-orange: #ff9500;
+  --ms-apple-orange-hover: #f08c00;
+  --ms-apple-orange-soft: rgba(255, 149, 0, 0.11);
+  --ms-apple-orange-border: rgba(255, 149, 0, 0.24);
+  
+  --ms-apple-red: #ff3b30;
+  --ms-apple-red-hover: #e6352b;
+  --ms-apple-red-soft: rgba(255, 59, 48, 0.11);
+  --ms-apple-red-border: rgba(255, 59, 48, 0.24);
+
+  --ms-apple-gray: #8e8e93;
+  --ms-apple-gray-soft: rgba(142, 142, 147, 0.1);
+
+  /* Light Theme Surfaces & Lines */
+  --ms-card-bg: var(--background-secondary, rgba(255, 255, 255, 0.85));
+  --ms-card-border: var(--background-modifier-border, rgba(0, 0, 0, 0.07));
+  --ms-separator: var(--background-modifier-border, rgba(60, 60, 67, 0.08));
+  --ms-input-bg: var(--background-primary, #ffffff);
+  
+  --ms-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --ms-shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
+
+  /* Rounded Radii (Squircle) */
+  --ms-radius-xs: 6px;
+  --ms-radius-sm: 8px;
+  --ms-radius-md: 12px;
+  --ms-radius-lg: 16px;
+  --ms-radius-pill: 9999px;
+
+  /* Typography */
+  --ms-font-apple: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", system-ui, sans-serif;
+  --ms-font-mono: "SF Mono", Menlo, Consolas, ui-monospace, monospace;
+}
+
+/* Dark Theme Adjustments (macOS Sequoia Dark) */
+.theme-dark {
+  --ms-apple-blue: #0a84ff;
+  --ms-apple-blue-hover: #409cff;
+  --ms-apple-blue-soft: rgba(10, 132, 255, 0.16);
+  --ms-apple-blue-border: rgba(10, 132, 255, 0.28);
+
+  --ms-apple-green: #30d158;
+  --ms-apple-green-hover: #34c759;
+  --ms-apple-green-soft: rgba(48, 209, 88, 0.16);
+  --ms-apple-green-border: rgba(48, 209, 88, 0.28);
+
+  --ms-apple-orange: #ff9f0a;
+  --ms-apple-orange-hover: #ffa826;
+  --ms-apple-orange-soft: rgba(255, 159, 10, 0.16);
+  --ms-apple-orange-border: rgba(255, 159, 10, 0.28);
+
+  --ms-apple-red: #ff453a;
+  --ms-apple-red-hover: #ff544a;
+  --ms-apple-red-soft: rgba(255, 69, 58, 0.16);
+  --ms-apple-red-border: rgba(255, 69, 58, 0.28);
+
+  --ms-card-bg: var(--background-secondary, rgba(44, 44, 46, 0.65));
+  --ms-card-border: var(--background-modifier-border, rgba(255, 255, 255, 0.09));
+  --ms-separator: var(--background-modifier-border, rgba(255, 255, 255, 0.07));
+  --ms-input-bg: var(--background-primary, rgba(30, 30, 32, 0.85));
+  
+  --ms-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --ms-shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   2. Strict Elimination of Explanatory Subtexts (不要有解释性的小字)
+   -------------------------------------------------------------------------- */
+.mindsync-sidebar .setting-item-description,
+.mindsync-settings .setting-item-description,
+.mindsync-sidebar small {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Sidebar Host & Base Typography (简约风格 & 原生字体)
+   -------------------------------------------------------------------------- */
+.mindsync-sidebar {
+  font-family: var(--ms-font-apple);
+  font-size: var(--nav-item-size, 13px);
+  line-height: 1.45;
+  color: var(--text-normal);
+  padding: 10px 12px;
+  overflow-x: hidden;
+  /* Reserve the scrollbar track on both the overview and longer pages so the
+     toolbar width does not jump when the content starts or stops scrolling. */
+  scrollbar-gutter: stable;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mindsync-sidebar [hidden] {
+  display: none !important;
+}
+
+.mindsync-sidebar p {
+  margin-block: 6px;
+}
+
+.mindsync-sidebar-section-title,
+.mindsync-sidebar h3 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin: 16px 0 8px 2px;
+}
+
+/* --------------------------------------------------------------------------
+   4. macOS Floating Toolbar (大小恰当的工具条与圆角方框)
+   -------------------------------------------------------------------------- */
+.mindsync-sidebar-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ms-card-bg);
+  border: 1px solid var(--ms-card-border);
+  border-radius: var(--ms-radius-sm);
+  padding: 3px 4px;
+  margin-bottom: 10px;
+  box-shadow: var(--ms-shadow-sm);
+}
+
+.mindsync-sidebar-toolbar button.clickable-icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ms-radius-xs);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.mindsync-sidebar-toolbar button.clickable-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.mindsync-sidebar-toolbar button.clickable-icon:hover:not(:disabled) {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.mindsync-sidebar-toolbar button.clickable-icon:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.mindsync-sidebar-toolbar button[aria-pressed="true"] {
+  background: var(--ms-apple-blue-soft) !important;
+  color: var(--ms-apple-blue) !important;
+}
+
+.mindsync-sidebar-toolbar button.clickable-icon[aria-current="page"] {
+  background: var(--ms-apple-blue-soft) !important;
+  color: var(--ms-apple-blue) !important;
+}
+
+.mindsync-sidebar-toolbar button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.is-mobile .mindsync-sidebar-toolbar button.clickable-icon {
+  width: 36px;
+  height: 36px;
+}
+
+/* --------------------------------------------------------------------------
+   5. Apple Capsule Status Badge (优雅胶囊徽章)
+   -------------------------------------------------------------------------- */
+.mindsync-sidebar-status-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 2px 0 8px 0;
+}
+.mindsync-sidebar-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--ms-radius-pill);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0;
+  letter-spacing: 0.2px;
+  background: var(--ms-apple-blue-soft);
+  color: var(--ms-apple-blue);
+  border: 1px solid var(--ms-apple-blue-border);
+  transition: all 0.2s ease;
+}
+
+.mindsync-sidebar .mindsync-sidebar-status {
+  margin: 0;
+}
+.mindsync-sidebar button.mindsync-back {
+  margin-left: 0;
+  margin-right: auto;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: var(--text-muted);
+}
+.mindsync-sidebar button.mindsync-back:hover:not(:disabled) {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+.mindsync-sidebar button.mindsync-back svg {
+  width: 16px;
+  height: 16px;
+}
+.mindsync-sidebar-status::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Status variants */
+.mindsync-sidebar-status[data-variant="success"] {
+  background: var(--ms-apple-green-soft);
+  color: var(--ms-apple-green);
+  border-color: var(--ms-apple-green-border);
+}
+
+.mindsync-sidebar-status[data-variant="warning"] {
+  background: var(--ms-apple-orange-soft);
+  color: var(--ms-apple-orange);
+  border-color: var(--ms-apple-orange-border);
+}
+
+.mindsync-sidebar-status[data-variant="error"] {
+  background: var(--ms-apple-red-soft);
+  color: var(--ms-apple-red);
+  border-color: var(--ms-apple-red-border);
+}
+
+.mindsync-sidebar-status[data-variant="busy"] {
+  background: var(--ms-apple-blue-soft);
+  color: var(--ms-apple-blue);
+  border-color: var(--ms-apple-blue-border);
+}
+
+/* --------------------------------------------------------------------------
+   6. Apple Alert Banners (简洁温润的提示横幅)
+   -------------------------------------------------------------------------- */
+.mindsync-error,
+.mindsync-sidebar .mindsync-error {
+  border-radius: var(--ms-radius-sm);
+  padding: 8px 12px;
+  margin: 6px 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  background: var(--ms-apple-red-soft);
+  color: var(--ms-apple-red);
+  border: 1px solid var(--ms-apple-red-border);
+  overflow-wrap: anywhere;
+}
+
+.mindsync-sidebar .mindsync-sidebar-feedback {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ms-apple-blue);
+  background: none;
+  border: 0;
+  overflow-wrap: anywhere;
+}
+
+.mindsync-sidebar [role="status"]:not(.mindsync-sidebar-status):not(.mindsync-sidebar-feedback) {
+  border-radius: var(--ms-radius-sm);
+  padding: 8px 12px;
+  margin: 6px 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  background: var(--ms-apple-blue-soft);
+  color: var(--ms-apple-blue);
+  border: 1px solid var(--ms-apple-blue-border);
+  overflow-wrap: anywhere;
+}
+
+/* --------------------------------------------------------------------------
+   7. Apple Inset Grouped Table (大小恰当的便当卡片)
+   -------------------------------------------------------------------------- */
+.mindsync-sidebar-summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0;
+  background: var(--ms-card-bg);
+  border: 1px solid var(--ms-card-border);
+  border-radius: var(--ms-radius-md);
+  padding: 0 12px;
+  margin: 8px 0 12px 0;
+  box-shadow: var(--ms-shadow-sm);
+}
+
+.mindsync-sidebar-summary dt {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  font-weight: 400;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--ms-separator);
+  margin: 0;
+}
+
+.mindsync-sidebar-summary dd {
+  color: var(--text-normal);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--ms-separator);
+  margin: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/* Inset divider: remove border for the last row */
+.mindsync-sidebar-summary dt:nth-last-child(2),
+.mindsync-sidebar-summary dd:last-child {
+  border-bottom: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. Apple Standard Buttons (克制高级的主次操作按钮)
+   -------------------------------------------------------------------------- */
+.mindsync-sidebar button,
+.mindsync-settings button {
+  height: 30px;
+  padding: 0 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  border-radius: var(--ms-radius-sm);
+  background: var(--background-modifier-hover);
+  border: 1px solid var(--ms-card-border);
+  color: var(--text-normal);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  box-shadow: var(--ms-shadow-sm);
+}
+
+.mindsync-sidebar button:hover:not(:disabled),
+.mindsync-settings button:hover:not(:disabled) {
+  background: var(--background-modifier-active-hover);
+}
+
+.mindsync-sidebar button:active:not(:disabled),
+.mindsync-settings button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.mindsync-sidebar button:disabled,
+.mindsync-settings button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Settings page: normal-sized section headings and a sticky save bar */
+.mindsync-settings h3 {
+  font-size: 12.5px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  margin: 16px 0 6px 2px;
+}
+
+.mindsync-settings-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px -12px 0;
+  padding: 10px 12px 4px;
+  background: var(--background-secondary);
+  border-top: 1px solid var(--ms-separator);
+}
+
+.mindsync-settings-footer .setting-item {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.mindsync-settings-footer .setting-item-info {
+  display: none;
+}
+
+.mindsync-settings .mindsync-settings-footer .setting-item-control {
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.mindsync-settings-actions {
+  display: flex;
+  gap: 8px;
+  margin: 6px 0 0;
+}
+
+.mindsync-settings .mindsync-settings-actions button,
+.mindsync-settings .mindsync-settings-actions button.mod-cta {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+
+/* Primary CTA Button (Apple Blue) */
+.mindsync-sidebar button.mod-cta,
+.mindsync-settings button.mod-cta,
+.mindsync-review-btn,
+.mindsync-sidebar-summary + button,
+.mindsync-sidebar button:has(+ .mindsync-sidebar-conflicts),
+.mindsync-sidebar button:has(+ .mindsync-sidebar-section-title) {
+  width: 100%;
+  height: 32px;
+  background: var(--ms-apple-blue) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 113, 227, 0.3);
+}
+
+.mindsync-sidebar button.mod-cta:hover:not(:disabled),
+.mindsync-settings button.mod-cta:hover:not(:disabled),
+.mindsync-review-btn:hover:not(:disabled) {
+  background: var(--ms-apple-blue-hover) !important;
+}
+
+.mindsync-history-preview {
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  max-height: 260px;
+  overflow: auto;
+  font-family: var(--font-monospace);
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--background-primary);
+  border: 1px solid var(--ms-card-border);
+  border-radius: var(--ms-radius-sm);
+}
+
+/* --------------------------------------------------------------------------
+   9. Conflicts Section (冲突处理卡片)
+   -------------------------------------------------------------------------- */.mindsync-sidebar-conflicts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mindsync-sidebar-conflict {
+  background: var(--ms-card-bg);
+  border: 1px solid var(--ms-card-border);
+  border-radius: var(--ms-radius-sm);
+  padding: 10px 12px;
+  box-shadow: var(--ms-shadow-sm);
+}
+
+.mindsync-sidebar-conflict p,
+.mindsync-sidebar-conflict .mindsync-sidebar-conflict-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-normal);
+  margin: 0 0 8px 0;
+  overflow-wrap: anywhere;
+}
+
+.mindsync-sidebar-conflict-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mindsync-sidebar-conflict-actions button {
+  height: 26px;
+  padding: 0 10px;
+  font-size: 11.5px;
+  border-radius: var(--ms-radius-xs);
+}
+
+/* --------------------------------------------------------------------------
+   10. Sub-pages Navigation Header (macOS 导航栏)
+   -------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+   11. Workspace-style File History List (文件历史列表)
+   -------------------------------------------------------------------------- */
+.mindsync-file-list {
+  list-style: none;
+  margin: 6px 0 14px;
+  padding: 0;
+  background: var(--ms-card-bg);
+  border: 1px solid var(--ms-card-border);
+  border-radius: var(--ms-radius-md);
+  overflow: hidden;
+}
+
+.mindsync-file-list > li + li,
+.mindsync-tree-children > li + li {
+  border-top: 1px solid var(--ms-card-border);
+}
+
+.mindsync-sidebar .mindsync-file-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: auto;
+  min-height: 44px;
+  margin: 0;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: start;
+  cursor: pointer;
+}
+
+.mindsync-sidebar .mindsync-file-entry:hover:not(:disabled) {
+  background: var(--background-modifier-hover);
+  transform: none;
+}
+
+.mindsync-file-icon,
+.mindsync-file-chevron {
+  display: inline-flex;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.mindsync-file-icon svg,
+.mindsync-file-chevron svg {
+  width: 15px;
+  height: 15px;
+}
+
+.mindsync-file-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.mindsync-file-name {
+  overflow: hidden;
+  color: var(--text-normal);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mindsync-file-meta {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 10.5px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mindsync-file-badge {
+  flex: none;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+  font-size: 10.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.mindsync-file-badge.is-deleted {
+  background: var(--background-modifier-error);
+  color: var(--text-on-accent);
+}
+
+/* Collapsible folder rows inside the history list */
+.mindsync-tree-dir {
+  list-style: none;
+}
+
+.mindsync-sidebar .mindsync-tree-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  height: 34px;
+  min-height: 34px;
+  margin: 0;
+  padding: 0 10px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: start;
+  cursor: pointer;
+}
+
+.mindsync-sidebar .mindsync-tree-toggle:hover:not(:disabled) {
+  background: var(--background-modifier-hover);
+  transform: none;
+}
+
+.mindsync-tree-chevron,
+.mindsync-tree-icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.mindsync-tree-chevron svg {
+  width: 13px;
+  height: 13px;
+  transition: transform 0.15s ease;
+}
+
+.mindsync-tree-toggle.is-expanded .mindsync-tree-chevron svg {
+  transform: rotate(90deg);
+}
+
+.mindsync-tree-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.mindsync-tree-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-normal);
+  font-size: 12px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mindsync-tree-count {
+  flex: none;
+  color: var(--text-muted);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mindsync-tree-children {
+  margin: 0;
+  padding: 0 0 0 14px;
+  list-style: none;
+}
+
+.mindsync-tree-children[hidden] {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   12. Plugin Settings Tab (.mindsync-settings / Apple Grouped Settings)
+   -------------------------------------------------------------------------- */
+.mindsync-settings {
+  font-family: var(--ms-font-apple);
+}
+
+.mindsync-settings .setting-item {
+  background: var(--ms-card-bg);
+  border: 1px solid var(--ms-card-border);
+  border-radius: var(--ms-radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--ms-shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mindsync-settings .setting-item-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-normal);
+}
+
+.mindsync-settings .setting-item-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* History & Sync Preview Lists */
+.mindsync-list {
+  max-height: 55vh;
+  overflow: auto;
+  padding: 0;
+  list-style: none;
+  background: var(--ms-card-bg);
+  border: 1px solid var(--ms-card-border);
+  border-radius: var(--ms-radius-md);
+  margin: 10px 0;
+}
+
+.mindsync-list li {
+  padding: 8px 12px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--ms-separator);
+}
+
+.mindsync-list li:last-child {
+  border-bottom: none;
+}
+
+.mindsync-conflict {
+  color: var(--ms-apple-orange);
+}
+
+.mindsync-summary {
+  color: var(--text-muted);
+  margin-block: 8px 14px;
+}
+
+.mindsync-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}

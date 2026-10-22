@@ -1,0 +1,79 @@
+name: mindsync-dev
+services:
+  postgres:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_DB: mindsync_dev
+      POSTGRES_USER: mindsync_dev
+      POSTGRES_PASSWORD: mindsync-dev-database-only
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:55439:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mindsync_dev -d mindsync_dev"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  backend:
+    image: mindsync-dev-backend
+    build:
+      context: ..
+      dockerfile: dev/backend.Dockerfile
+    env_file:
+      - path: mailpit.env
+      - path: smtp.env
+        required: false
+    environment:
+      DATABASE_URL: postgres://mindsync_dev:mindsync-dev-database-only@postgres:5432/mindsync_dev
+      MINDSYNC_AUTH_SECRET: mindsync-dev-auth-secret-at-least-32-characters
+      MINDSYNC_PUBLIC_ORIGIN: http://localhost:5173
+      MINDSYNC_INSECURE_DEVELOPMENT: "true"
+      MINDSYNC_DATA: /data
+      MINDSYNC_LIBRARY: MindSync Development
+      MINDSYNC_PORT: "8080"
+      CARGO_TARGET_DIR: /cargo-target
+      CARGO_BUILD_JOBS: "2"
+    ports:
+      - "127.0.0.1:18089:8080"
+    volumes:
+      - cargo_registry:/usr/local/cargo/registry
+      - cargo_target:/cargo-target
+      - sync_data:/data
+      - ../server/src/admin:/workspace/server/src/admin:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health >/dev/null"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 300s
+    stop_grace_period: 10s
+  mailpit:
+    image: axllent/mailpit:v1.27
+    ports:
+      - "127.0.0.1:18025:8025"
+    environment:
+      MP_MAX_MESSAGES: "100"
+  frontend:
+    image: mindsync-dev-frontend
+    build:
+      context: ..
+      dockerfile: dev/frontend/Dockerfile
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:5173/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+volumes:
+  postgres_data:
+  cargo_registry:
+  cargo_target:
+  sync_data:

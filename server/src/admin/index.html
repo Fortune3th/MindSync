@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>MindSync — Administration</title>
+  <link rel="icon" href="/admin/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/admin/app.css">
+  <script src="/admin/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div id="login" class="login-layout">
+    <section class="login-card" aria-labelledby="login-title">
+      <div class="login-brand"><img src="/admin/logo.svg" width="40" height="40" alt=""><span>MindSync</span></div>
+      <h1 id="login-title">Sign in</h1>
+      <form id="login-form" method="post">
+        <div id="email-field"><label for="admin-email">Email</label><input id="admin-email" type="email" autocomplete="username" maxlength="254" required placeholder="you@example.com"></div>
+        <div id="password-field"><div class="auth-label-row"><label for="admin-password">Password</label><button id="forgot-password" type="button" class="auth-link">Forgot password?</button></div><div class="password-input"><input id="admin-password" type="password" autocomplete="current-password" maxlength="256" spellcheck="false" required><button id="show-password" type="button" class="quiet" aria-label="Show password" aria-pressed="false">Show</button></div></div>
+        <div id="confirmation-field" hidden><label for="confirm-password">Confirm password</label><input id="confirm-password" type="password" autocomplete="new-password" maxlength="256" spellcheck="false"></div>
+        <ul id="password-checklist" class="password-checklist" aria-label="Password requirements" hidden><li data-rule="length">12–128 characters</li><li data-rule="lower">Lowercase letter</li><li data-rule="upper">Uppercase letter</li><li data-rule="number">Number</li><li data-rule="symbol">Special character</li></ul>
+        <div id="code-field" hidden><label for="verification-code">Verification code</label><div class="input-action"><input id="verification-code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="6-digit code"><button id="send-registration-code" type="button" class="secondary">Send code</button></div></div>
+        <p id="auth-status" class="auth-help" role="status" hidden></p>
+        <p id="login-error" class="error" role="alert" hidden></p>
+        <button class="primary wide" id="sign-in" type="submit">Sign in</button>
+        <div class="auth-footer"><span id="account-prompt">Don't have an account?</span><button id="register-account" type="button" class="auth-link">Create account</button><button id="back-to-login" type="button" class="auth-link" hidden>Sign in</button></div>
+        <button id="resend-code" type="button" class="auth-link auth-resend" hidden>Resend code</button>
+      </form>
+    </section>
+  </div>
+
+  <div id="workspace" class="macos-window" hidden>
+    <header class="macos-titlebar">
+      <div class="window-title"><img src="/admin/logo.svg" width="18" height="18" alt=""><span>MindSync</span></div>
+      <div class="titlebar-actions">
+        <div class="segmented-control" role="group" aria-label="Theme">
+          <button type="button" class="segment-btn" data-theme-value="system">Auto</button>
+          <button type="button" class="segment-btn" data-theme-value="light">Light</button>
+          <button type="button" class="segment-btn" data-theme-value="dark">Dark</button>
+        </div>
+      </div>
+    </header>
+    <div class="window-content">
+      <aside class="macos-sidebar" aria-label="Main navigation">
+        <div class="sidebar-section">
+          <span class="sidebar-section-title">Library</span>
+          <nav class="sidebar-menu">
+            <a class="sidebar-item" href="#overview" data-page="overview"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Overview</span></a>
+            <a class="sidebar-item" href="#devices" data-page="devices"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="14" height="11" rx="2"/><path d="M7 20h7M10 15v5"/><rect x="16" y="10" width="5" height="11" rx="1.5"/></svg><span>Devices</span></a>
+            <a class="sidebar-item" href="#files" data-page="files"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5"/></svg><span>Files</span></a>
+          </nav>
+        </div>
+        <div class="sidebar-section">
+          <span class="sidebar-section-title">System</span>
+          <nav class="sidebar-menu">
+            <a class="sidebar-item" href="#maintenance" data-page="maintenance"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7.5" ry="3"/><path d="M4.5 6v12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6"/><path d="M4.5 12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3"/></svg><span>Maintenance</span></a>
+            <a class="sidebar-item" href="#settings" data-page="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 4-.5 2-1.8 1-2-.5-2 3.4L5.2 11v2l-1.5 1.1 2 3.4 2-.5 1.8 1 .5 2h4l.5-2 1.8-1 2 .5 2-3.4-1.5-1.1v-2l1.5-1.1-2-3.4-2 .5-1.8-1L14 4z"/><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></a>
+          </nav>
+        </div>
+        <div class="sidebar-summary">
+          <div class="sidebar-summary-row"><span>Library</span><strong id="sidebar-library">—</strong></div>
+          <div class="sidebar-summary-row"><span>Stored content</span><strong id="sidebar-storage">—</strong></div>
+        </div>
+        <div class="sidebar-footer"><button id="sign-out" class="quiet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5v16h4m5-12 4 4-4 4m-5-4h11"/></svg><span>Sign out</span></button></div>
+      </aside>
+      <main id="main" class="macos-main" tabindex="-1">
+        <div class="view-header">
+          <h1 id="page-title">Overview</h1>
+          <button id="refresh" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 11-2l3 3M4 16l3 3a7 7 0 0 0 11-2"/></svg>Refresh</button>
+        </div>
+        <p id="notice" class="notice" role="status" hidden></p>
+        <section id="overview" data-section aria-labelledby="page-title">
+          <div class="status-strip"><span id="health-badge" class="badge success">Connected</span><span id="server-origin" class="mono"></span><span id="last-refreshed" class="muted refresh-time"></span></div>
+          <div class="apple-cards-grid" role="group" aria-label="Library statistics">
+            <article class="apple-card"><div class="card-top"><span class="card-title">Active files</span><span class="card-icon-pill blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6"/></svg></span></div><strong id="stat-files" class="card-large-number">—</strong></article>
+            <article class="apple-card"><div class="card-top"><span class="card-title">Active devices</span><span class="card-icon-pill green" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="14" height="11" rx="2"/><path d="M7 20h7M10 15v5"/><rect x="16" y="10" width="5" height="11" rx="1.5"/></svg></span></div><strong id="stat-devices" class="card-large-number">—</strong></article>
+            <article class="apple-card"><div class="card-top"><span class="card-title">Stored content</span><span class="card-icon-pill orange" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7.5" ry="3"/><path d="M4.5 6v12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6"/><path d="M4.5 12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3"/></svg></span></div><strong id="stat-storage" class="card-large-number">—</strong></article>
+            <article class="apple-card"><div class="card-top"><span class="card-title">Current revision</span><span class="card-icon-pill purple" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 11-2l3 3M4 16l3 3a7 7 0 0 0 11-2"/></svg></span></div><strong id="stat-revision" class="card-large-number">—</strong></article>
+          </div>
+          <div class="overview-grid">
+            <article class="inset-group">
+              <div class="inset-heading"><h2>Library details</h2><span class="badge">Protocol <span id="protocol">—</span></span></div>
+              <dl class="inset-list">
+                <div class="inset-row"><dt>Library name</dt><dd id="library-name">—</dd></div>
+                <div class="inset-row"><dt>File size limit</dt><dd id="max-file">—</dd></div>
+                <div class="inset-row"><dt>Total version size</dt><dd id="logical-size">—</dd></div>
+                <div class="inset-row"><dt>Settings sync</dt><dd id="config-support">—</dd></div>
+              </dl>
+            </article>
+            <article class="inset-group">
+              <div class="inset-heading"><h2>Actions</h2></div>
+              <div class="action-list"><a class="shortcut" href="#devices"><span class="shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="12" height="13" rx="2"/><path d="M7 21h6M10 16v5"/><rect x="16" y="11" width="5" height="10" rx="1"/></svg></span><div><strong>Connect a device</strong></div><svg class="shortcut-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a><a class="shortcut" href="#files"><span class="shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10H3z"/></svg></span><div><strong>Browse files</strong></div><svg class="shortcut-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></a></div>
+            </article>
+          </div>
+        </section>
+        <section id="devices" data-section hidden aria-labelledby="page-title">
+          <article class="inset-group registration"><div class="inset-heading"><h2>New device</h2></div><form id="device-form" class="inset-form"><label for="device-name">Device name</label><div class="input-action"><input id="device-name" name="device-name" maxlength="200" required placeholder="Device name" autocomplete="off"><button class="primary" id="register-device" type="submit">Create token</button></div></form></article>
+          <article id="new-credential" class="inset-group credential" hidden><div class="inset-heading"><h2>Device token</h2></div><label class="sr-only" for="created-token">Device token</label><div class="input-action"><input id="created-token" readonly spellcheck="false" autocomplete="off"><button id="copy-token" class="secondary">Copy token</button></div><button id="dismiss-token" class="quiet">Done</button></article>
+          <article class="inset-group"><div class="inset-heading"><h2>Your devices</h2><span id="device-count" class="badge">0 devices</span></div><div id="device-list" class="device-list"></div></article>
+        </section>
+        <section id="files" data-section hidden aria-labelledby="page-title">
+          <div class="files-grid"><article class="card file-card"><div class="file-toolbar"><div class="search-field"><label class="sr-only" for="file-search">Search files by path</label><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" id="file-search" placeholder="Search files" autocomplete="off"></div><label class="deleted-filter"><input type="checkbox" id="show-deleted" role="switch" aria-label="Show deleted files"><span>Deleted</span></label></div><div class="file-table-heading"><span class="file-column-label">Name<span id="file-count" class="file-count"></span></span><span>Size</span></div><div id="file-list" class="file-list" role="region" tabindex="0" aria-label="Files"></div></article><article id="file-detail" class="card file-detail" aria-label="File details"><div id="file-placeholder" class="empty-state"><span class="empty-mark" aria-hidden="true">↗</span><h2>Select a file</h2></div><div id="file-selected" hidden><h2 id="selected-path"></h2><p id="selected-meta" class="muted"></p><label for="file-version">Version</label><select id="file-version"></select><div class="detail-actions"><button id="preview-file" class="secondary">Preview text</button><button id="download-file" class="primary">Download</button><button id="restore-file" class="secondary">Restore</button></div><p id="file-message" role="status" class="notice"></p><pre id="file-preview" tabindex="0" hidden></pre></div></article></div>
+        </section>
+        <section id="maintenance" data-section hidden aria-labelledby="page-title" class="settings-page">
+          <article class="inset-group"><div class="inset-heading"><h2>Object collection</h2><span id="gc-badge" class="badge">Not checked</span></div><dl class="inset-list"><div class="inset-row"><dt>Grace period</dt><dd id="gc-grace">—</dd></div><div class="inset-row"><dt>Stored content</dt><dd id="gc-storage">—</dd></div><div class="inset-row"><dt>Eligible objects</dt><dd id="gc-objects">—</dd></div><div class="inset-row"><dt>Reclaimable</dt><dd id="gc-reclaimable">—</dd></div><div class="inset-row"><dt>Last collection</dt><dd id="gc-last">—</dd></div></dl><div class="group-actions"><button id="gc-preview" class="secondary" type="button">Check</button><button id="gc-apply" class="primary" type="button" disabled>Collect</button></div><p id="gc-message" role="status" class="notice" hidden></p></article>
+        </section>
+        <section id="settings" data-section hidden aria-labelledby="page-title" class="settings-page">
+          <article class="inset-group"><div class="inset-heading"><h2>Appearance</h2></div><div class="inset-row setting-row"><label for="theme">Theme</label><select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div></article>
+          <article class="inset-group"><div class="inset-heading"><h2>Connection</h2></div><dl class="inset-list"><div class="inset-row"><dt>Library name</dt><dd id="settings-library-name">—</dd></div><div class="inset-row"><dt>Server</dt><dd class="server-setting"><span id="settings-server" class="mono">—</span><button id="copy-server" class="quiet" type="button">Copy</button></dd></div></dl></article>
+          <article class="inset-group"><div class="inset-heading"><h2>Account</h2></div><div class="inset-form"><p id="account-email" class="muted"></p><form id="change-password-form" method="post"><label for="current-password">Current password</label><input id="current-password" type="password" autocomplete="current-password" required maxlength="256"><label for="new-password">New password</label><input id="new-password" type="password" autocomplete="new-password" required maxlength="256" aria-describedby="change-password-help"><p id="change-password-help" class="auth-help">Use 12–128 characters including lowercase, uppercase, a number, and a special character.</p><label for="new-password-confirmation">Confirm new password</label><input id="new-password-confirmation" type="password" autocomplete="new-password" required maxlength="256"><button id="change-password" class="primary" type="submit">Change password</button></form></div></article>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="revoke-dialog" aria-labelledby="revoke-title"><form method="dialog"><h2 id="revoke-title">Revoke this device?</h2><p id="revoke-name"></p><p id="revoke-error" class="error" role="alert" hidden></p><div class="dialog-actions"><button value="cancel" class="secondary" id="cancel-revoke">Keep access</button><button value="revoke" class="danger" id="confirm-revoke" type="button">Revoke access</button></div></form></dialog>
+  <dialog id="rename-dialog" aria-labelledby="rename-title"><form method="dialog"><h2 id="rename-title">Rename device</h2><label for="rename-name">Device name</label><input id="rename-name" maxlength="200" autocomplete="off"><p id="rename-error" class="error" role="alert" hidden></p><div class="dialog-actions"><button value="cancel" class="secondary" id="cancel-rename">Cancel</button><button value="save" class="primary" id="confirm-rename" type="button">Save</button></div></form></dialog>
+  <dialog id="restore-dialog" aria-labelledby="restore-title"><form method="dialog"><h2 id="restore-title">Restore this revision?</h2><p id="restore-name"></p><p id="restore-error" class="error" role="alert" hidden></p><div class="dialog-actions"><button value="cancel" class="secondary" id="cancel-restore">Keep current</button><button value="restore" class="primary" id="confirm-restore" type="button">Restore</button></div></form></dialog>
+  <dialog id="gc-dialog" aria-labelledby="gc-title"><form method="dialog"><h2 id="gc-title">Collect unreferenced objects?</h2><p id="gc-confirm"></p><p id="gc-error" class="error" role="alert" hidden></p><div class="dialog-actions"><button value="cancel" class="secondary" id="cancel-gc">Cancel</button><button value="collect" class="primary" id="confirm-gc" type="button">Collect</button></div></form></dialog>
+
+</body>
+</html>

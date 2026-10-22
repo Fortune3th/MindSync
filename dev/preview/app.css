@@ -1,0 +1,298 @@
+/* ==========================================================================
+   Preview Workbench Styles - macOS Sequoia Workspace
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --desk-bg: #ececf0;
+  --nav-bg: rgba(255, 255, 255, 0.75);
+  --nav-border: rgba(0, 0, 0, 0.08);
+  --frame-bg: #ffffff;
+  --titlebar-bg: #f6f6f6;
+  --titlebar-border: rgba(0, 0, 0, 0.08);
+  --window-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] {
+  --desk-bg: #121214;
+  --nav-bg: rgba(28, 28, 30, 0.78);
+  --nav-border: rgba(255, 255, 255, 0.1);
+  --frame-bg: #1e1e20;
+  --titlebar-bg: #262629;
+  --titlebar-border: rgba(255, 255, 255, 0.08);
+  --window-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  background: var(--desk-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Floating Glass Top Bar */
+.preview-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--nav-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-icon {
+  width: 20px;
+  height: 20px;
+  color: #0071e3;
+}
+
+.brand-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ms-text-primary, #1d1d1f);
+}
+
+.brand-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: rgba(0, 113, 227, 0.1);
+  color: #0071e3;
+  text-transform: uppercase;
+}
+
+/* Segmented Control in Navbar */
+.segmented-control {
+  display: inline-flex;
+  background: rgba(120, 120, 128, 0.12);
+  padding: 3px;
+  border-radius: 9px;
+  gap: 2px;
+}
+
+.seg-btn {
+  height: 28px;
+  padding: 0 16px;
+  font-size: 12.5px;
+  font-weight: 500;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--ms-text-secondary, #86868b);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.seg-btn.active {
+  background: var(--frame-bg);
+  color: var(--ms-text-primary, #1d1d1f);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0.5px 1px rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.state-presets {
+  display: flex;
+  gap: 6px;
+}
+
+.preset-pill {
+  height: 24px;
+  padding: 0 9px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 9999px;
+  background: rgba(120, 120, 128, 0.08);
+  border: 1px solid rgba(120, 120, 128, 0.14);
+  color: var(--ms-text-secondary, #86868b);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.preset-pill:hover {
+  background: rgba(0, 113, 227, 0.1);
+  color: #0071e3;
+  border-color: rgba(0, 113, 227, 0.25);
+}
+
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(120, 120, 128, 0.1);
+  color: var(--ms-text-primary, #1d1d1f);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: rgba(120, 120, 128, 0.2);
+}
+
+/* Stage & Windows */
+.preview-stage {
+  flex: 1;
+  padding: 32px 24px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  overflow-x: auto;
+}
+
+/* Window Frames (macOS Sequoia) */
+.window-frame {
+  background: var(--frame-bg);
+  border-radius: 14px;
+  box-shadow: var(--window-shadow);
+  overflow: hidden;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.obsidian-frame {
+  width: 340px;
+  min-height: 520px;
+}
+
+.window-titlebar {
+  height: 42px;
+  background: var(--titlebar-bg);
+  border-bottom: 1px solid var(--titlebar-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+}
+
+.traffic-lights {
+  display: flex;
+  gap: 7px;
+}
+
+.light {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.light.red { background: #ff5f56; }
+.light.yellow { background: #ffbd2e; }
+.light.green { background: #27c93f; }
+
+.window-title {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ms-text-secondary, #86868b);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sub-tab-btn {
+  height: 22px;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  color: var(--ms-text-secondary, #86868b);
+  cursor: pointer;
+}
+
+.sub-tab-btn.active {
+  background: rgba(120, 120, 128, 0.16);
+  color: var(--ms-text-primary, #1d1d1f);
+  font-weight: 600;
+}
+
+.window-body {
+  padding: 14px;
+  overflow-y: auto;
+  max-height: 640px;
+}
+
+/* Controls used by the Obsidian mock-up (formerly shared with the Zotero pane) */
+.mindsync-switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.mindsync-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.mindsync-slider {
+  position: absolute;
+  inset: 0;
+  background: rgba(120, 120, 128, 0.2);
+  border-radius: 9999px;
+  transition: 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mindsync-slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mindsync-switch input:checked + .mindsync-slider {
+  background: #34c759;
+}
+
+.mindsync-switch input:checked + .mindsync-slider::before {
+  transform: translateX(16px);
+}
+
+.mindsync-btn-secondary {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}

@@ -1,0 +1,45 @@
+.venv/
+__pycache__/
+.pytest_cache/
+node_modules/
+main.js
+dist/
+.env
+/dev/smtp.env
+/dev/smtp.env.pending
+/docker/internal-https/data/
+/docker/internal-https/config/
+nas-data/
+backups/
+*.tsbuildinfo
+.DS_Store
+target/
+
+# Per-library credentials (keep the example template).
+library/*.env
+!library/example.env
+
+# Local planning notes (kept on disk, not published).
+progress.md
+task_plan.md
+findings.md
+.planning/
+cc-deals.md
+opencode-deepseek-feedback.md
+
+# Local tooling caches and preview output.
+.vite/
+.playwright-cli/
+dev/preview/main.js
+
+/docker/domain-https/alidns.env
+/docker/domain-https/data/
+/docker/domain-https/config/
+
+# Private combined-container certificate and DNS state.
+/tls/
+/docker/rag/rag.env
+
+# Woodpecker CI credentials and runtime state.
+/docker/woodpecker/woodpecker.env
+/docker/woodpecker/data/

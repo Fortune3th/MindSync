@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindSync 插件端前端预览 (Apple HIG)</title>
+  <!-- Direct imports of production plugin stylesheets -->
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/dev/preview/app.css">
+</head>
+<body>
+  <!-- Top Navigation Bar (macOS Floating Glass Bar) -->
+  <header class="preview-navbar">
+    <div class="nav-brand">
+      <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        <circle cx="12" cy="12" r="4"/>
+      </svg>
+      <span class="brand-title">MindSync Plugins</span>
+      <span class="brand-badge">Apple Design</span>
+    </div>
+
+    <!-- Segmented View Switcher -->
+    <div class="segmented-control" role="tablist">
+      <button class="seg-btn active" data-view="obsidian">Obsidian 插件端</button>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="nav-controls">
+      <div class="state-presets">
+        <button class="preset-pill" data-state="synced">正常同步</button>
+        <button class="preset-pill" data-state="syncing">传输中</button>
+        <button class="preset-pill" data-state="paused">已暂停</button>
+        <button class="preset-pill" data-state="conflict">冲突状态</button>
+        <button class="preset-pill" data-state="error">异常报警</button>
+      </div>
+
+      <button id="theme-toggle" class="icon-btn" title="切换浅色/深色模式">
+        <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Showcase Canvas -->
+  <main class="preview-stage">
+
+    <!-- 1. Obsidian Plugin Window Mockup -->
+    <section id="section-obsidian" class="window-frame obsidian-frame">
+      <div class="window-titlebar">
+        <div class="traffic-lights">
+          <span class="light red"></span>
+          <span class="light yellow"></span>
+          <span class="light green"></span>
+        </div>
+        <div class="window-title">Obsidian — Vault (MindSync Sidebar)</div>
+        <div class="obsidian-sub-tabs">
+          <button class="sub-tab-btn active" data-obsidian-sub="overview">概览边栏</button>
+          <button class="sub-tab-btn" data-obsidian-sub="rag">检索问答 (RAG)</button>
+          <button class="sub-tab-btn" data-obsidian-sub="settings">设置选项</button>
+        </div>
+      </div>
+
+      <div class="window-body obsidian-body">
+        <!-- Sidebar host element with production .mindsync-sidebar class -->
+        <div class="mindsync-sidebar" id="obsidian-sidebar-root">
+          <!-- Floating macOS Toolbar -->
+          <div class="mindsync-sidebar-toolbar" role="toolbar" aria-label="MindSync actions">
+            <button class="clickable-icon" id="obs-btn-sync" title="Sync now" aria-label="Sync now">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            </button>
+            <button class="clickable-icon" id="obs-btn-preview" title="Preview sync" aria-label="Preview sync">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </button>
+            <button class="clickable-icon" id="obs-btn-pause" title="Pause automatic sync" aria-label="Pause automatic sync">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            </button>
+            <button class="clickable-icon" id="obs-btn-history" title="File history" aria-label="File history">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </button>
+            <button class="clickable-icon" id="obs-btn-search" title="Search notes" aria-label="Search notes">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+            <button class="clickable-icon" id="obs-btn-ask" title="Ask notes" aria-label="Ask notes">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="clickable-icon" id="obs-btn-config" title="Settings and plugins" aria-label="Settings and plugins">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
+          </div>
+
+          <!-- Apple Status Pill -->
+          <div>
+            <p class="mindsync-sidebar-status" id="obs-status-pill" data-variant="success" role="status">Synced</p>
+          </div>
+
+          <!-- Alert Banners -->
+          <p class="mindsync-error" id="obs-error-banner" style="display: none;" role="alert">Unable to connect to remote server</p>
+          <p id="obs-feedback-banner" style="display: none;" role="status">Preview generated successfully</p>
+
+          <!-- 1A. Overview Subpage -->
+          <div id="obs-subpage-overview">
+            <dl class="mindsync-sidebar-summary">
+              <dt>Last sync</dt>
+              <dd id="obs-val-last-sync">Just now</dd>
+              <dt>Pending operations</dt>
+              <dd id="obs-val-pending">0</dd>
+              <dt>Settings and plugins</dt>
+              <dd id="obs-val-config">Ready</dd>
+              <dt>Updates awaiting review</dt>
+              <dd id="obs-val-updates">0</dd>
+            </dl>
+
+            <button id="obs-btn-review" class="mindsync-review-btn" style="display: none;">Review updates</button>
+
+            <h3 class="mindsync-sidebar-section-title">Conflicts</h3>
+            <div class="mindsync-sidebar-conflicts" id="obs-conflicts-container">
+              <p style="color: var(--text-muted); font-size: 12px; margin: 4px 2px;">No conflicts</p>
+            </div>
+          </div>
+
+          <!-- 1B. RAG Subpage (Search & Ask) -->
+          <div id="obs-subpage-rag" style="display: none;">
+            <div class="mindsync-sidebar-page-header">
+              <button id="obs-rag-back" class="mindsync-back-btn">Back</button>
+              <h3>Notes Knowledge</h3>
+            </div>
+            <form class="mindsync-knowledge" onsubmit="event.preventDefault()">
+              <label>
+                Question or search
+                <textarea rows="3" placeholder="Ask or search notes…">What is the consensus algorithm in MindSync?</textarea>
+              </label>
+              <details class="mindsync-knowledge-scope">
+                <summary>All notes</summary>
+                <label>
+                  Folder
+                  <input type="text" placeholder="Research" value="Architecture">
+                </label>
+              </details>
+              <div class="mindsync-actions">
+                <button type="button" class="mindsync-segment-btn" aria-pressed="true">Search</button>
+                <button type="button" class="mindsync-segment-btn" aria-pressed="false">Ask</button>
+              </div>
+            </form>
+            <div class="mindsync-knowledge-results">
+              <details class="mindsync-knowledge-source" open>
+                <summary>[1] consensus-protocol.md</summary>
+                <p class="mindsync-knowledge-path">docs/architecture/consensus-protocol.md</p>
+                <blockquote>MindSync uses FastCDC content-defined chunking paired with Blake3 hashing to maintain immutable content addressability and verify local divergence.</blockquote>
+                <button type="button">Open note</button>
+              </details>
+            </div>
+          </div>
+
+          <!-- 1C. Settings Subpage -->
+          <div id="obs-subpage-settings" class="mindsync-settings" style="display: none;">
+            <div class="setting-item">
+              <div class="setting-item-name">Server URL</div>
+              <div class="setting-item-control">
+                <input type="text" value="https://notes.example.com">
+              </div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-item-name">Device name</div>
+              <div class="setting-item-control">
+                <input type="text" value="MacBook Pro">
+              </div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-item-name">Pause automatic sync</div>
+              <div class="setting-item-control">
+                <label class="mindsync-switch">
+                  <input type="checkbox" id="obs-switch-pause">
+                  <span class="mindsync-slider"></span>
+                </label>
+              </div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-item-name">Sync settings and plugins</div>
+              <div class="setting-item-control">
+                <label class="mindsync-switch">
+                  <input type="checkbox" checked>
+                  <span class="mindsync-slider"></span>
+                </label>
+              </div>
+            </div>
+            <div style="margin-top: 14px;">
+              <button class="mod-cta" style="width: 100%;">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="/preview/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+.git
+.env
+.env.*
+**/*.env
+dev/smtp.env.pending
+docker/internal-https/data
+docker/internal-https/config
+!library/example.env
+server/target
+**/__pycache__
+**/*.pyc
+
+node_modules
+backups
+*.tar
+*.tar.gz
+*.dump
+*.log
+
+# macOS AppleDouble and Finder metadata must never become SQL migrations.
+**/._*
+**/.DS_Store
+
+docker/domain-https/data
+docker/domain-https/config
+
+# Private combined-container certificate and DNS state.
+tls

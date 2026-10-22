@@ -1,0 +1,29 @@
+name: mindsync-https
+services:
+  caddy:
+    image: ${MINDSYNC_CADDY_IMAGE:?Set a pinned Caddy image}
+    container_name: mindsync-https
+    restart: unless-stopped
+    network_mode: host
+    user: "${MINDSYNC_RUN_UID:?Set the directory owner UID}:${MINDSYNC_RUN_GID:?Set the directory owner GID}"
+    read_only: true
+    cap_drop: [ALL]
+    # The official binary requires this file capability in its bounding set.
+    cap_add: [NET_BIND_SERVICE]
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      MINDSYNC_HTTPS_IP: ${MINDSYNC_HTTPS_IP:?Set the private NAS IP}
+      MINDSYNC_HTTPS_PORT: ${MINDSYNC_HTTPS_PORT:-8443}
+      MINDSYNC_UPSTREAM: ${MINDSYNC_UPSTREAM:-127.0.0.1:8080}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./data:/data
+      - ./config:/config
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,noexec,size=16m
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"

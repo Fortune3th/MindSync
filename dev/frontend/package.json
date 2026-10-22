@@ -1,0 +1,7 @@
+{
+  "name": "mindsync-admin-development",
+  "private": true,
+  "type": "module",
+  "scripts": {"dev": "vite --config /app/vite.config.mjs"},
+  "devDependencies": {"vite": "7.3.7"}
+}

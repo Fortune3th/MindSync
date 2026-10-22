@@ -1,0 +1,73 @@
+name: mindsync
+services:
+  mindsync:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: mindsync
+    restart: unless-stopped
+    # Container names default to mindsync / postgres; add-library.sh adds suffixes for later libraries.
+    # Container names must be unique on the host.
+    container_name: ${MINDSYNC_CONTAINER_NAME:-mindsync}
+    # Run as the data directory owner; named volumes default to the image UID 10001.
+    # For bind mounts, add-library.sh sets the owner UID/GID.
+    # fnOS storage ACLs may reject writes by unknown users such as UID 10001.
+    user: "${MINDSYNC_RUN_UID:-10001}:${MINDSYNC_RUN_GID:-10001}"
+    environment:
+      # Legacy secrets remain readable for compatibility with existing deployments.
+      MINDSYNC_OWNER_EMAIL: ${MINDSYNC_OWNER_EMAIL:-}
+      MINDSYNC_AUTH_SECRET: ${MINDSYNC_AUTH_SECRET:-}
+      MINDSYNC_SETUP_TOKEN: ${MINDSYNC_SETUP_TOKEN:-}
+      MINDSYNC_ADMIN_TOKEN: ${MINDSYNC_ADMIN_TOKEN:-}
+      MINDSYNC_PUBLIC_ORIGIN: ${MINDSYNC_PUBLIC_ORIGIN:?Set the public HTTPS origin}
+      MINDSYNC_INSECURE_DEVELOPMENT: ${MINDSYNC_INSECURE_DEVELOPMENT:-false}
+      MINDSYNC_TRUSTED_PROXIES: ${MINDSYNC_TRUSTED_PROXIES:-}
+      MINDSYNC_SMTP_HOST: ${MINDSYNC_SMTP_HOST:-}
+      MINDSYNC_SMTP_PORT: ${MINDSYNC_SMTP_PORT:-587}
+      MINDSYNC_SMTP_SECURITY: ${MINDSYNC_SMTP_SECURITY:-starttls}
+      MINDSYNC_SMTP_USERNAME: ${MINDSYNC_SMTP_USERNAME:-}
+      MINDSYNC_SMTP_PASSWORD: ${MINDSYNC_SMTP_PASSWORD:-}
+      MINDSYNC_SMTP_FROM: ${MINDSYNC_SMTP_FROM:-}
+      MINDSYNC_DATA: /data
+      MINDSYNC_LIBRARY: ${MINDSYNC_LIBRARY:-MindSync}
+      MINDSYNC_PORT: "8080"
+      MINDSYNC_MAX_FILE_BYTES: ${MINDSYNC_MAX_FILE_BYTES:-52428800}
+      MINDSYNC_GC_GRACE_SECONDS: ${MINDSYNC_GC_GRACE_SECONDS:-604800}
+      DATABASE_URL: postgresql://mindsync:${POSTGRES_PASSWORD:?Set a strong PostgreSQL password}@postgres:5432/mindsync
+    ports:
+      - "${MINDSYNC_BIND_ADDRESS:-127.0.0.1}:${MINDSYNC_PORT:-8080}:8080"
+    volumes:
+      # Without MINDSYNC_DATA_DIR, use the project named volume.
+      # An absolute path creates a bind mount so the readable /data/vault tree is visible
+      # in the NAS file manager. Each library needs a separate data directory.
+      - ${MINDSYNC_DATA_DIR:-sync_data}:/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      # Override image defaults: initial startup runs migrations and rebuilds the file tree.
+      # Slow NAS disks may exceed the default 30-second start period.
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8080/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 120s
+    stop_grace_period: 30s
+  postgres:
+    image: postgres:17-bookworm
+    container_name: ${MINDSYNC_POSTGRES_CONTAINER_NAME:-postgres}
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mindsync
+      POSTGRES_USER: mindsync
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a strong PostgreSQL password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mindsync -d mindsync"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  sync_data:
+  postgres_data:

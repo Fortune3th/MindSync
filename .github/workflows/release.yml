@@ -1,0 +1,33 @@
+name: release
+on:
+  push:
+    # Tags equal the manifest version, for example 0.3.6.
+    tags: ["*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: node scripts/release/package.mjs
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          # BRAT and the community directory read these three files directly.
+          files: |
+            main.js
+            manifest.json
+            styles.css
+            dist/plugin/*.zip
+            dist/source/*.tar.gz
+            dist/plugin/checksums.sha256
+            dist/source/checksums.sha256

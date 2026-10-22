@@ -1,0 +1,42 @@
+name: release
+on:
+  push:
+    # Tags equal the manifest version, for example 0.3.6.
+    tags: ["*"]
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install plugin dependencies
+        run: npm ci
+      - name: Build and package
+        run: |
+          npm run build
+          node scripts/release/package.mjs
+      - name: Upload release assets
+        env:
+          GITEA_API_URL: ${{ secrets.GITEA_API_URL }}
+          GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          release_id=$(curl -fsS -X POST "$GITEA_API_URL/repos/$REPO/releases" \
+            -H "Authorization: token $GITEA_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"tag_name\":\"$TAG\",\"name\":\"$TAG\",\"draft\":false}" \
+            | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).id))')
+          # BRAT and the community directory read these three files directly.
+          for file in main.js manifest.json styles.css \
+                      dist/plugin/*.zip dist/source/*.tar.gz \
+                      dist/plugin/checksums.sha256 dist/source/checksums.sha256; do
+            [ -f "$file" ] || continue
+            curl -fsS -X POST "$GITEA_API_URL/repos/$REPO/releases/$release_id/assets?name=$(basename "$file")" \
+              -H "Authorization: token $GITEA_TOKEN" \
+              -F "attachment=@$file" > /dev/null
+            echo "uploaded $(basename "$file")"
+          done

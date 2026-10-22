@@ -1,0 +1,41 @@
+when:
+  - event: [push, pull_request]
+
+services:
+  - name: postgres
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_DB: mindsync_test
+      POSTGRES_USER: mindsync
+      POSTGRES_PASSWORD: mindsync
+
+steps:
+  - name: wait-for-postgres
+    image: postgres:17-bookworm
+    commands:
+      - for i in $(seq 1 30); do pg_isready -h postgres -U mindsync -d mindsync_test && exit 0; sleep 2; done; exit 1
+
+  - name: test-server
+    image: rust:1.85-bookworm
+    depends_on: [wait-for-postgres]
+    environment:
+      TEST_DATABASE_URL: postgresql://mindsync:mindsync@postgres:5432/mindsync_test
+      RUST_BACKTRACE: "1"
+      # Build artifacts live outside the workspace so they survive between runs.
+      CARGO_TARGET_DIR: /cache/target
+    volumes:
+      - /vol1/1000/docker/composes/woodpecker/cache/cargo-registry:/usr/local/cargo/registry
+      - /vol1/1000/docker/composes/woodpecker/cache/cargo-target:/cache
+    commands:
+      - cd server
+      - cargo fmt --check
+      - cargo test --locked
+
+  - name: test-obsidian
+    image: node:22-bookworm
+    volumes:
+      - /vol1/1000/docker/composes/woodpecker/cache/npm:/root/.npm
+    commands:
+      - npm ci
+      - npm test
+      - npm run build

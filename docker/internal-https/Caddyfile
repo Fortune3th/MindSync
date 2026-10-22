@@ -1,0 +1,24 @@
+{
+	auto_https disable_redirects
+	skip_install_trust
+	admin off
+	persist_config off
+	pki {
+		ca local {
+			name "MindSync Internal CA"
+			root_cn "MindSync Internal Root CA"
+			intermediate_cn "MindSync Internal Intermediate CA"
+		}
+	}
+	servers {
+		protocols h1 h2
+	}
+}
+
+https://{$MINDSYNC_HTTPS_IP}:{$MINDSYNC_HTTPS_PORT} {
+	bind {$MINDSYNC_HTTPS_IP}
+	tls internal
+	reverse_proxy {$MINDSYNC_UPSTREAM} {
+		header_up X-Real-IP {remote_host}
+	}
+}
